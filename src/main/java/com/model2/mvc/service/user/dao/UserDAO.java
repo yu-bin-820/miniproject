@@ -37,14 +37,14 @@ public class UserDAO {
 
 	public UserVO findUser(String userId) throws Exception {
 		
-		Connection con = DBUtil.getConnection();
+		Connection con = DBUtil.getConnection();  //연결
 
-		String sql = "select * from USERS where USER_ID=?";
+		String sql = "select * from USERS where USER_ID=?"; 
 		
-		PreparedStatement stmt = con.prepareStatement(sql);
+		PreparedStatement stmt = con.prepareStatement(sql); //쿼리날릴준비
 		stmt.setString(1, userId);
 
-		ResultSet rs = stmt.executeQuery();
+		ResultSet rs = stmt.executeQuery();  //쿼리날림
 
 		UserVO userVO = null;
 		while (rs.next()) {
@@ -59,10 +59,11 @@ public class UserDAO {
 			userVO.setEmail(rs.getString("EMAIL"));
 			userVO.setRegDate(rs.getDate("REG_DATE"));
 		}
-		
+		 //날린거 출력 
 		con.close();
-
+		//sql닫기
 		return userVO;
+		//정보 
 	}
 
 	public HashMap<String,Object> getUserList(SearchVO searchVO) throws Exception {
@@ -83,8 +84,8 @@ public class UserDAO {
 
 		PreparedStatement stmt = 
 			con.prepareStatement(	sql,
-														ResultSet.TYPE_SCROLL_INSENSITIVE,
-														ResultSet.CONCUR_UPDATABLE);
+														ResultSet.TYPE_SCROLL_INSENSITIVE, 
+														ResultSet.CONCUR_UPDATABLE);	
 		ResultSet rs = stmt.executeQuery();
 
 		rs.last();

@@ -7,10 +7,10 @@ public class ProductVO {
 	
 	private String fileName;
 	private String manuDate;
-	private int price;
+	private String price;
 	private String prodDetail;
 	private String prodName;
-	private int prodNo;
+	private String prodNo;
 	private Date regDate;
 	private String proTranCode;
 	
@@ -35,10 +35,10 @@ public class ProductVO {
 	public void setManuDate(String manuDate) {
 		this.manuDate = manuDate;
 	}
-	public int getPrice() {
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 	public String getProdDetail() {
@@ -53,10 +53,10 @@ public class ProductVO {
 	public void setProdName(String prodName) {
 		this.prodName = prodName;
 	}
-	public int getProdNo() {
+	public String getProdNo() {
 		return prodNo;
 	}
-	public void setProdNo(int prodNo) {
+	public void setProdNo(String prodNo) {
 		this.prodNo = prodNo;
 	}
 	public Date getRegDate() {

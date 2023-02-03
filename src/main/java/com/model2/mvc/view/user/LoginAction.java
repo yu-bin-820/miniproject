@@ -19,10 +19,10 @@ public class LoginAction extends Action{
 		userVO.setUserId(request.getParameter("userId"));
 		userVO.setPassword(request.getParameter("password"));
 		
-		UserService service=new UserServiceImpl();
-		UserVO dbVO=service.loginUser(userVO);
+		UserService service=new UserServiceImpl();  //userDao»ý¼º
+		UserVO dbVO=service.loginUser(userVO);  //Á¤º¸ ½Ï´Ù °¡Á®¿È
 		
-		HttpSession session=request.getSession();
+		HttpSession session=request.getSession(); 
 		session.setAttribute("user", dbVO);
 		
 		return "redirect:/index.jsp";

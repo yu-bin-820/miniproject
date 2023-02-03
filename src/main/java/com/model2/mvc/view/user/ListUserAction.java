@@ -18,7 +18,7 @@ public class ListUserAction extends Action {
 												HttpServletResponse response) throws Exception {
 		SearchVO searchVO=new SearchVO();
 		
-		int page=1;
+		int page=1;	
 		if(request.getParameter("page") != null)
 			page=Integer.parseInt(request.getParameter("page"));
 		
