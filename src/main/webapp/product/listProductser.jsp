@@ -3,11 +3,20 @@
     
 <%@ page import="java.util.*"  %>
 <%@ page import="com.model2.mvc.service.product.vo.*" %>
+<%@ page import="com.model2.mvc.service.user.vo.*" %>
 <%@ page import="com.model2.mvc.common.*" %>
 
 <%
 	HashMap<String,Object> map=(HashMap<String,Object>)request.getAttribute("map");
 	SearchVO searchVO=(SearchVO)request.getAttribute("searchVO");
+	UserVO user=(UserVO)request.getAttribute("userVO");
+	
+	String role="";
+
+	if(user != null) {
+		role=user.getRole();
+	}
+
 	
 	int total=0;
 	ArrayList<ProductVO> list=null;
@@ -80,12 +89,18 @@ function fncGetUserList(){
 				<option value="2" >상품번호</option>
 				
 		<%
-				}else {
+				}else if(searchVO.getSearchCondition().equals("1")){
 		%>
 				<option value="0">상품번호</option>
 				<option value="1" selected>상품명</option>
 				<option value="2" >상품번호</option>
 				
+		<%
+				} else{
+					%>
+					<option value="0" >상품번호</option>
+					<option value="1" >상품명</option>
+					<option value="2" selected>상품번호</option>
 		<%
 				}
 		%>
@@ -107,6 +122,7 @@ function fncGetUserList(){
 	<%
 		}
 	%>
+
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -114,7 +130,7 @@ function fncGetUserList(){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncGetUserList();">검색</a>
+						<a href="javascript:fncGetProductList();">검색</a>
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -144,26 +160,67 @@ function fncGetUserList(){
 		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>
 	<% 	
-		int no=list.size();
 		for(int i=0; i<list.size(); i++) {
 			ProductVO vo = (ProductVO)list.get(i);
+			//PurchaseVO purvo ;
 	%>
+			<%  if(role.equals("admin")){ %>
 	<tr class="ct_list_pop">
-		<td align="center"><%=no--%></td>
+		<td align="center"><%=i+1%></td>
 		<td></td>
 		<td align="left">
-			<a href="/getProduct.do?prodNo=<%=vo.getProdName() %>"><%= vo.getProdName() %></a>
+			<a href="/getProduct.do?prodNo=<%=vo.getProdNo() %>"><%= vo.getProdName() %></a>
 		</td>
 		<td></td>
 		<td align="left"><%= vo.getPrice() %></td>
 		<td></td>
 		<td align="left"><%= vo.getRegDate() %></td>
+		<td></td>
+		<td align="left">
+		<%if(vo.getProTranCode().equals("0")){ %>
+		판매중
+		<%} else if(vo.getProTranCode().equals("1")) {%>
+			구매완료
+		<%} else if(vo.getProTranCode().equals("2")) {%>
+			배송중
+		<%} else if(vo.getProTranCode().equals("3")) {%>
+			배송완료
+		<%} %>
+			
 		</td>		
 	</tr>
 	<tr>
+		<%} else { %>
+			<tr class="ct_list_pop">
+		<td align="center"><%=i+1%></td>
+		<td></td>
+		<td align="left">
+			<%if(vo.getProTranCode().equals("0")||vo.getProTranCode()==null){ %>
+			<a href="/getProduct.do?prodNo=<%=vo.getProdNo() %>"><%= vo.getProdName() %></a>
+			<%} else { %>
+			<%= vo.getProdName() %>
+			<%} %>
+		</td>
+		<td></td>
+		<td align="left"><%= vo.getPrice() %></td>
+		<td></td>
+		<td align="left"><%= vo.getRegDate() %></td>
+		<td></td>
+		<td align="left">
+		<%if(vo.getProTranCode().equals("0")||vo.getProTranCode()==null){ %>
+		판매중
+		<%} else {%>
+
+			재고 없음
+			<%} %>
+			
+		</td>		
+	</tr>
+	<tr>
+		<% } %>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>
-	<% } %>
+<%} %>
 </table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
@@ -173,9 +230,7 @@ function fncGetUserList(){
 			for(int i=1;i<=totalPage;i++){
 		%>
 			<a href="/listProduct.do?page=<%=i%>&menu=search"><%=i %></a>
-		<%
-			}
-		%>	
+		<%}	%>	
     	</td>
 	</tr>
 </table>

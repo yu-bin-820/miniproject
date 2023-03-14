@@ -33,6 +33,7 @@ public class UserDAO {
 		stmt.executeUpdate();
 		
 		con.close();
+		stmt.close();
 	}
 
 	public UserVO findUser(String userId) throws Exception {
@@ -61,6 +62,8 @@ public class UserDAO {
 		}
 		 //날린거 출력 
 		con.close();
+		rs.close();
+		stmt.close();
 		//sql닫기
 		return userVO;
 		//정보 
@@ -123,6 +126,8 @@ public class UserDAO {
 		System.out.println("map().size() : "+ map.size());
 
 		con.close();
+		rs.close();
+		stmt.close();
 			
 		return map;
 	}
@@ -142,5 +147,6 @@ public class UserDAO {
 		stmt.executeUpdate();
 		
 		con.close();
+		stmt.close();
 	}
 }

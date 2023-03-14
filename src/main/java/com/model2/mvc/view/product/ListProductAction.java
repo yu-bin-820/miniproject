@@ -4,11 +4,15 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.model2.mvc.common.SearchVO;
 import com.model2.mvc.framework.Action;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
+import com.model2.mvc.service.purchase.PurchaseService;
+import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
+import com.model2.mvc.service.user.vo.UserVO;
 
 public class ListProductAction extends Action {
 	
@@ -35,14 +39,14 @@ public class ListProductAction extends Action {
 		request.setAttribute("searchVO", searchVO);
 		
 		
-		String a = request.getParameter("menu");
-		//System.out.println(a.equals("manage"));
-		
-		if(a.equals("manage")) {
+		if(request.getParameter("menu").equals("manage")) {
 		
 			return "forward:/product/listProduct.jsp";
 		
 		}else {
+			HttpSession session=request.getSession();
+			UserVO userVO = (UserVO)session.getAttribute("user");
+			request.setAttribute("userVO", userVO);
 			
 			return "forward:/product/listProductser.jsp";
 		}

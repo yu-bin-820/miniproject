@@ -37,6 +37,8 @@ public class ProductDAO {
 		}
 		
 		con.close();
+		rs.close();
+		stmt.close();
 		
 		return productVO;		
 	}
@@ -45,17 +47,20 @@ public class ProductDAO {
 		
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "select * from Product";
+		String sql = "select pro.prod_no, pro.prod_name, pro.prod_detail, pro.manufacture_day, "
+				+ " pro.price, pro.image_file, pro.reg_date, NVL(pur.tran_status_code,0) tran_status_code "
+				+ " from product pro, transaction pur "
+				+ " where pro.prod_no=pur.prod_no(+) ";
 		if(searchVO.getSearchCondition() != null) {
 			if(searchVO.getSearchCondition().equals("0")) {
-				sql += "where PROD_NO='"+searchVO.getSearchKeyword()+"'";
+				sql += " AND pro.PROD_NO='"+searchVO.getSearchKeyword()+"'";
 			}else if (searchVO.getSearchCondition().equals("1")) {
-				sql += "where PROD_NAME='" + searchVO.getSearchKeyword()+"'";
+				sql += " AND pro.PROD_NAME='" + searchVO.getSearchKeyword()+"'";
 			}else if (searchVO.getSearchCondition().equals("2")) {
-				sql += "where PRICE='"+searchVO.getSearchKeyword()+"'";
+				sql += " AND pro.PRICE='"+searchVO.getSearchKeyword()+"'";
 			}
 		}
-		sql += " order by PROD_NO";
+		sql += " order by pro.PROD_NO";
 		
 		PreparedStatement stmt = con.prepareStatement(sql,
 																ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -84,6 +89,7 @@ public class ProductDAO {
 				vo.setProdName(rs.getString("PROD_NAME"));
 				vo.setProdNo(rs.getString("PROD_NO"));
 				vo.setRegDate(rs.getDate("REG_DATE"));
+				vo.setProTranCode(rs.getString("tran_status_code").trim());
 				
 				list.add(vo);
 				if(!rs.next())
@@ -96,6 +102,8 @@ public class ProductDAO {
 		System.out.println("map().size() :"+map.size());
 		
 		con.close();
+		rs.close();
+		stmt.close();
 		
 		return map;
 	}
@@ -137,8 +145,10 @@ public class ProductDAO {
 		stmt.setString(4,productVO.getPrice());
 		stmt.setString(5, productVO.getFileName());
 		stmt.setString(6, productVO.getProdNo());
+		stmt.executeUpdate();
 		
 		con.close();
+		stmt.close();
 		
 	}
 
